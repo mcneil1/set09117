@@ -74,13 +74,56 @@ void main()
 			player--;
 			getch();
 		}
-
+		
+		playerWin = win();
 		
 		player++;
 		
-	} while(playerWin != 1);
+	} while(playerWin == 0);
 	gameBoard();
 	
+	if(playerWin == 1)
+		printf("\aCongratulations Player %d, you win!", --player);
+	
+    else if(playerWin == 2)
+		printf("\aIt's a draw!");
+	
+}
+
+int win()
+{
+
+
+	if(space[0] == space[1] && space[1] == space[2])
+		return 1;
+	
+	else if(space[3] == space[4] && space[4] == space[5])
+		return 1;
+	
+	else if(space[6] == space[7] && space[7] == space[8])
+		return 1;
+	
+	else if(space[0] == space[3] && space[3] == space[6])
+		return 1;
+	
+	else if(space[1] == space[4] && space[4] == space[7])
+		return 1;
+	
+	else if(space[2] == space[5] && space[5] == space[9])
+		return 1;
+	
+	else if(space[0] == space[4] && space[4] == space[8])
+		return 1;
+	
+	else if(space[2] == space[4] && space[4] == space[6])
+		return 1;
+	
+	else if (space[0] != '1' && space[1] != '2' && space[2] != '3' && space[3] != '4' && space[4] != '5' && space[5] != '6' && space[6] != '7' && space[7] != '8' && space[8] != '9')
+		return 2;
+
+	else 
+		return 0;
+			
 }
 
 void gameBoard()
