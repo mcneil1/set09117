@@ -8,13 +8,18 @@ char space2[SIZE] = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 struct stack 
 {
 	char undoStack[SIZE];
+	char redoStack[SIZE];
 	char top;
 };
 
 void gameBoard();
-void init_stack(struct stack *);
+void init_ustack(struct stack *);
 void push(struct stack *, char item);
 char *pop(struct stack *);
+void init_rstack(struct stack *);
+void redoPush(struct stack *, char item);
+char *redoPop(struct stack *);
+void emptyStack(struct stack *);
 
 void main()
 {
@@ -23,8 +28,11 @@ void main()
 	int move; 
 	char mark;
 	
-	struct stack s;
-	init_stack(&s);
+	struct stack u;
+	init_ustack(&u);
+	
+	struct stack r;
+	init_rstack(&r);
 	
 	char *i = NULL;
 
@@ -62,62 +70,87 @@ void main()
 		if (move == 1 && space[0] == '1')
 		{
 			space[0] = mark;
-			push(&s, move);
+			push(&u, move);
+			emptyStack(&r);
 		}
 		
 		else if (move == 2 && space[1] == '2')
 		{
 			space[1] = mark;
-			push(&s, move);
+			push(&u, move);
+			emptyStack(&r);
 		}
 		
 		else if (move == 3 && space[2] == '3')
 		{
 			space[2] = mark;
-			push(&s, move);
+			push(&u, move);
+			emptyStack(&r);
 		}
 		
 		else if (move == 4 && space[3] == '4')
 		{
 			space[3] = mark;
-			push(&s, move);
+			push(&u, move);
+			emptyStack(&r);
 		}
 		
 		else if (move == 5 && space[4] == '5')
 		{
 			space[4] = mark;
-			push(&s, move);
+			push(&u, move);
+			emptyStack(&r);
 		}
 		
 		else if (move == 6 && space[5] == '6')
 		{
 			space[5] = mark;
-			push(&s, move);
+			push(&u, move);
+			emptyStack(&r);
 		}
 			
 		else if (move == 7 && space[6] == '7')
 		{
 			space[6] = mark;
-			push(&s, move);
+			push(&u, move);
+			emptyStack(&r);
 		}
 		
 		else if (move == 8 && space[7] == '8')
 		{
 			space[7] = mark;
-			push(&s, move);
+			push(&u, move);
+			emptyStack(&r);
 		}
 			
 		else if (move == 9 && space[8] == '9')
 		{
 			space[8] = mark;
-			push(&s, move);
+			push(&u, move);
+			emptyStack(&r);
 		}
 		
 		else if (move == 0)
 		{
 
-			i = pop(&s);
+			i = pop(&u);
 			space[(*i)-1] = space2[(*i)-1];
+			redoPush(&r, *i); 
+		}
+		
+		else if (move == 11)
+		{
+			if (r.top == -1)
+			{
+				printf("Invalid move, no moves to redo");
+				player--;
+			}
+			else
+			{
+			i = redoPop(&r);
+			space[(*i)-1] = mark;
+			push(&u, *i);
+			}
 		}
 			
 		else
@@ -138,38 +171,71 @@ void main()
 		printf("\aCongratulations Player %d, you win!", --player);
 	
     else if(playerWin == 2)
-		printf("\aIt's a draw!");
+		printf("\aIt'u a draw!");
 	
 }
 
-void init_stack(struct stack *s)
+void init_ustack(struct stack *u)
 {
-	s->top = -1;
+	u->top = -1;
 }
 
-void push(struct stack *s, char item)
+void init_rstack(struct stack *r)
 {
-	if(s->top == SIZE-1)
+	r->top = -1;
+}
+
+void push(struct stack *u, char item)
+{
+	if(u->top == SIZE-1)
 	{
 		printf("Stack is full. Couldn't push '%d' onto stack\n", item);
 		return;
 	}
-	s->top++;
-	s->undoStack[s->top] = item;
+	u->top++;
+	u->undoStack[u->top] = item;
 }
 
-char *pop(struct stack *s)
+void redoPush(struct stack *r, char item)
+{
+	r->top++;
+	r->redoStack[r->top] = item;
+}
+
+char *pop(struct stack *u)
 {
 	char *data;
-	if(s->top == -1)
+	if(u->top == -1)
 	{
 		printf("there are no moves to undo\n");
 		return NULL;
 	}
 	
-	data = &s->undoStack[s->top];
-	s->top--;
+	data = &u->undoStack[u->top];
+	u->top--;
 	return data;
+}
+
+char *redoPop(struct stack *r)
+{
+	char *data;
+	if(r->top == -1)
+	{
+		printf("there are no moves to redo\n");
+		return NULL;
+	}
+	
+	data = &r->redoStack[r->top];
+	r->top--;
+	return data;
+}
+
+void emptyStack(struct stack *r)
+{
+	do
+	{
+		redoPop(r);
+	}while (r->top != -1);
 }
 
 int win()
