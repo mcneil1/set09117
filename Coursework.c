@@ -27,6 +27,7 @@ void main()
 	int playerWin = 0;
 	int move; 
 	char mark;
+	char choice;
 	
 	struct stack u;
 	init_ustack(&u);
@@ -132,7 +133,6 @@ void main()
 		
 		else if (move == 0)
 		{
-
 			i = pop(&u);
 			space[(*i)-1] = space2[(*i)-1];
 			redoPush(&r, *i); 
@@ -168,10 +168,30 @@ void main()
 	gameBoard();
 	
 	if(playerWin == 1)
+	{
 		printf("\aCongratulations Player %d, you win!", --player);
+	}
+
 	
     else if(playerWin == 2)
-		printf("\aIt'u a draw!");
+	{
+		printf("\aIt'u a draw!\n");
+	}
+	
+	printf("Would you like to play again? y = Yes/n = No:");
+	do
+	{
+	scanf("%c", &choice);
+	if(choice == 'y')
+	{
+		system("coursework");
+	}
+	else if(choice == 'n')
+	{
+		system("\n");
+	}
+	}while(choice != 'n' || choice != 'y');
+		
 	
 }
 
@@ -243,28 +263,52 @@ int win()
 
 
 	if(space[0] == space[1] && space[1] == space[2])
+	{
+		space[3] = '\0', space[4] = '\0', space[5] = '\0', space[6] = '\0', space[7] = '\0', space[8] = '\0';
 		return 1;
+	}
 	
 	else if(space[3] == space[4] && space[4] == space[5])
+	{
+		space[0] = '\0', space[1] = '\0', space[2] = '\0', space[6] = '\0', space[7] = '\0', space[8] = '\0';
 		return 1;
+	}
 	
 	else if(space[6] == space[7] && space[7] == space[8])
+	{
+		space[3] = '\0', space[4] = '\0', space[5] = '\0', space[0] = '\0', space[1] = '\0', space[2] = '\0';
 		return 1;
+	}
 	
 	else if(space[0] == space[3] && space[3] == space[6])
+	{
+		space[1] = '\0', space[2] = '\0', space[5] = '\0', space[4] = '\0', space[7] = '\0', space[8] = '\0';
 		return 1;
+	}
 	
 	else if(space[1] == space[4] && space[4] == space[7])
+	{
+		space[0] = '\0', space[2] = '\0', space[5] = '\0', space[6] = '\0', space[3] = '\0', space[8] = '\0';
 		return 1;
+	}
 	
-	else if(space[2] == space[5] && space[5] == space[9])
+	else if(space[2] == space[5] && space[5] == space[8])
+	{
+		space[3] = '\0', space[4] = '\0', space[0] = '\0', space[6] = '\0', space[7] = '\0', space[1] = '\0';
 		return 1;
+	}
 	
 	else if(space[0] == space[4] && space[4] == space[8])
+	{
+		space[3] = '\0', space[1] = '\0', space[5] = '\0', space[6] = '\0', space[7] = '\0', space[2] = '\0';
 		return 1;
+	}
 	
 	else if(space[2] == space[4] && space[4] == space[6])
+	{
+		space[3] = '\0', space[1] = '\0', space[5] = '\0', space[0] = '\0', space[7] = '\0', space[8] = '\0';
 		return 1;
+	}
 	
 	else if (space[0] != '1' && space[1] != '2' && space[2] != '3' && space[3] != '4' && space[4] != '5' && space[5] != '6' && space[6] != '7' && space[7] != '8' && space[8] != '9')
 		return 2;
